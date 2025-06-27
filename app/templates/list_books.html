@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        {% include "catalog-menu.html" %}
+        <div class="col-md-9">
+            <h2 class="text-center mb-4">Каталог книг</h2>
+            <div class="row gy-4">
+                <!-- Шаблон карточки книги -->
+                {% for book in books %}
+                <div class="col-md-4">
+                    <div class="card shadow p-3 mb-5 bg-white rounded">
+                        <div class="card-img-top">
+                            <img src="{{ book.cover }}"
+                                 alt="{{ book.title }}"
+                                 class="img-fluid card-img-top"
+                                 style="max-height: 250px; object-fit: cover;">
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">
+                                <strong>Автор:</strong> {{ book.author }}<br>
+                                <strong>Год издания:</strong> {{ book.year }}<br>
+                                <strong>Цена:</strong> {{ book.price }} ₽
+                            </p>
+
+                            <!-- Рейтинг книги -->
+                            <div class="mb-2">
+                                <span class="badge bg-primary">{{ book.rating }}</span>
+                            </div>
+
+                            <!-- Краткое описание -->
+                            <div class="card-text mb-2">
+                                <strong>Описание:</strong><br>
+                                {{ book.description|truncate(150) }}
+                            </div>
+
+                            <!-- Кнопка добавления в корзину -->
+                            <a href="#" class="btn btn-primary">В корзину</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

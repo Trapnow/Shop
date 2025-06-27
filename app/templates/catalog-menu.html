@@ -1,0 +1,14 @@
+<div class="col-md-3">
+    <div class="list-group">
+        <a href="{{ url_for('book.list_books') }}" class="list-group-item list-group-item-action active">
+            <strong>Все книги</strong>
+        </a>
+
+        {% for section in sections %}
+            <a href="{{ url_for('book.list_books', genre=section.title) }}"
+               class="list-group-item list-group-item-action {% if selected_genre == section.title %}active{% endif %}">
+                {{ section.title }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
