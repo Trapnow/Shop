@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">{{ book.title }}</h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="{{ book.cover }}"
+                         alt="{{ book.title }}"
+                         class="img-fluid"
+                         style="max-height: 400px; object-fit: cover;">
+                </div>
+                <div class="col-md-6">
+                    <h4>Основная информация</h4>
+                    <p><strong>Автор:</strong> {{ book.author }}</p>
+                    <p><strong>Цена:</strong> {{ book.price }} ₽</p>
+                    <p><strong>Жанр:</strong> {{ book.genre }}</p>
+                    <p><strong>Год издания:</strong> {{ book.year }}</p>
+                    <p><strong>Рейтинг:</strong> {{ book.rating }}</p>
+                    <p><strong>Описание:</strong><br>{{ book.description }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <form action="{{ url_for('cart.add_to_cart', book_id=book.id) }}" method="post">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Добавить в корзину
+                    </button>
+                </form>
+            </div>
+
+            <hr>
+
+            <h4>Отзывы и комментарии</h4>
+            {% if current_user.is_authenticated %}
+            <form action="{{ url_for('book.add_comment', book_id=book.id) }}" method="post">
+                <div class="mb-3">
+                    <textarea name="content" class="form-control" rows="4"
+                              placeholder="Напишите ваш комментарий..."></textarea>
+                </div>
+                <div class="mb-3">
+                    <select name="rating" class="form-select">
+                        <option value="">Выберите оценку</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+            </form>
+            {% else %}
+            <p class="text-center">
+                <a href="{{ url_for('user.login') }}" class="btn btn-secondary">
+                    Войдите для оставления отзыва
+                </a>
+            </p>
+            {% endif %}
+
+            <hr>
+
+            <h4>Все отзывы ({{ comments|length }})</h4>
+            {% for comment in comments %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6>
+                        {{ comment.user.name }}
+                        <span class="badge bg-primary">{{ comment.rating }}</span>
+                    </h6>
+                    <p>{{ comment.content }}</p>
+                    <small class="text-muted">{{ comment.created_at }}</small>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="text-center">
+                <a href="{{ url_for('book.index') }}" class="btn btn-secondary">
+                    Назад в каталог
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

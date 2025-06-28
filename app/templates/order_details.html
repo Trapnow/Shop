@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Детали заказа №{{ order.id }}</h2>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Основная информация</h5>
+            <p><strong>Статус заказа:</strong> {{ order.status }}</p>
+            <p><strong>Дата оформления:</strong> {{ order.created_at.strftime('%d.%m.%Y') }}</p>
+            <p><strong>Итого к оплате:</strong> {{ order.total_amount }} ₽</p>
+
+            <hr>
+
+            <h5>Информация о доставке</h5>
+            <p><strong>ФИО заказчика:</strong> {{ order.name }}</p>
+            <p><strong>Телефон:</strong> {{ order.phone }}</p>
+            <p><strong>Способ доставки:</strong> {{ order.delivery_method }}</p>
+            <p><strong>Дата доставки:</strong> {{ order.delivery_date.strftime('%d.%m.%Y') }}</p>
+
+            {% if order.delivery_method == 'До двери' %}
+                <p><strong>Адрес доставки:</strong> {{ order.delivery_address }}</p>
+            {% elif order.delivery_method == 'Самовывоз' %}
+                <p><strong>Пункт выдачи:</strong> {{ order.pickup_point }}</p>
+            {% endif %}
+
+            <p class="text-muted">Оплата производится при получении</p>
+
+            <hr>
+
+            <h5>Список товаров</h5>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Количество</th>
+                    <th>Наименование</th>
+                    <th>Цена</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in order.order_items %}
+                <tr>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.book.title }}</td>
+                    <td>{{ item.price }} ₽</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-end">
+                {% if order.status == 'Ожидает обработки' %}
+                <form action="{{ url_for('order.cancel_order', order_id=order.id) }}" method="post">
+                    <button type="submit" class="btn btn-danger">Отменить заказ</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('order.user_orders') }}" class="btn btn-secondary">Назад к списку заказов</a>
+</div>
+{% endblock %}

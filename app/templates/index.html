@@ -9,17 +9,23 @@
         <div class="col-md-9">
             <h2>Топ-3 продаж недели</h2>
             <div class="row">
-                <!-- Карточки книг -->
+                {% for book in top_books %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="book1.jpg" class="card-img-top" alt="Обложка книги">
+                        <img src="{{ url_for('static', filename=book.cover) }}"
+                             alt="{{ book.title }}"
+                             class="card-img-top"
+                             style="height: 250px; object-fit: cover;">
                         <div class="card-body">
-                            <h5 class="card-title">Название книги</h5>
-                            <p class="card-text">Автор: Иванов И.И.</p>
-                            <a href="/list_books" class="btn btn-primary">Купить</a>
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">Автор: {{ book.author }}</p>
+                            <p class="card-text">Цена: {{ book.price }} ₽</p>
+                            <a href="{{ url_for('book.book_detail', book_id=book.id) }}"
+                               class="btn btn-primary">Купить</a>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
 
             <h2 class="mt-5">Полный каталог книг</h2>
@@ -27,10 +33,12 @@
                 {% for section in sections %}
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="{{ url_for('static', filename=section.img) }}" class="card-img-top" alt="{{ section.title }}">
+                        <img src="{{ url_for('static', filename=section.img) }}" class="card-img-top"
+                             alt="{{ section.title }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ section.title }}</h5>
-                            <a href="{{ url_for('book.list_books', genre=section.title) }}" class="btn btn-primary">Перейти в раздел</a>
+                            <a href="{{ url_for('book.list_books', genre=section.title) }}" class="btn btn-primary">Перейти
+                                в раздел</a>
                         </div>
                     </div>
                 </div>

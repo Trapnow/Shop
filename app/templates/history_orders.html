@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content container mt-5">
+    <h2>История заказов</h2>
+    
+    {% if orders %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>№ заказа</th>
+                <th>Статус</th>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Детали</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.created_at.strftime('%d.%m.%Y') }}</td>
+                <td>{{ order.total_amount }} ₽</td>
+                <td>
+                    <a href="{{ url_for('order.order_details', order_id=order.id) }}" class="btn btn-sm btn-primary">
+                        Детали
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>У вас нет оформленных заказов</p>
+    {% endif %}
+</div>
+{% endblock %}

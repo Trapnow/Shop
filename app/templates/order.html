@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Оформление заказа</h2>
+
+            <form action="{{ url_for('order.order_form') }}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Фамилия Имя заказчика</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Номер телефона</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="delivery" class="form-label">Способ доставки</label>
+                    <select class="form-select" id="delivery" name="delivery" required onchange="showDeliveryFields(this)">
+                        <option value="">Выберите способ доставки</option>
+                        <option value="До двери">Доставка до двери</option>
+                        <option value="Самовывоз">Самовывоз</option>
+                    </select>
+                </div>
+
+                <!-- Блок для доставки до двери -->
+                <div id="homeDelivery" class="mb-3" style="display:none;">
+                    <label for="address" class="form-label">Адрес доставки</label>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Укажите полный адрес">
+                </div>
+
+                <!-- Блок для самовывоза -->
+                <div id="pickupPoints" class="mb-3" style="display:none;">
+                    <label for="pickup" class="form-label">Выберите пункт выдачи</label>
+                    <select class="form-select" id="pickup" name="pickup">
+                        <option value="">Выберите пункт</option>
+                        <option value="ул. Центральная 5">Пункт 1 - ул. Центральная 5</option>
+                        <option value="ул. Торговая 8">Пункт 2 - ул. Торговая 5</option>
+                        <option value="ул. Подземная 23">Пункт 3 - ул. Подземная 23</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="delivery_date" class="form-label">Дата доставки</label>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Информация об оплате</label>
+                    <p class="text-muted">
+                        Оплата производится при получении заказа.
+                        Сумма заказа: {{ total_amount }} ₽
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Подтвердить и оформить заказ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function showDeliveryFields(selectElement) {
+    const deliveryType = selectElement.value;
+
+    document.getElementById('homeDelivery').style.display = 'none';
+    document.getElementById('pickupPoints').style.display = 'none';
+
+    if (deliveryType === 'До двери') {
+        document.getElementById('homeDelivery').style.display = 'block';
+    } else if (deliveryType === 'Самовывоз') {
+        document.getElementById('pickupPoints').style.display = 'block';
+    }
+}
+</script>
+{% endblock %}

@@ -21,26 +21,36 @@
                 <button class="btn btn-outline-success" type="submit">Искать</button>
             </form>
             <ul class="navbar-nav ms-auto">
+                {% if current_user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Иконка
+                        {% if current_user.avatar %}
+                        <img src="{{ url_for('static', filename='upload/' + current_user.avatar) }}"
+                             alt="Аватар"
+                             class="rounded-circle"
+                             style="width: 32px; height: 32px;">
+                        {% else %}
+                        <span class="bi-person"></span>
+                        {% endif %}
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Корзина</a></li>
-                        <li><a class="dropdown-item" href="#">Заказы</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end"  aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('cart.show_cart') }}">Корзина</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('order.user_orders') }}">Заказы</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Выход</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('user.logout') }}">Выход</a></li>
                     </ul>
                 </li>
+                {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Вход</a>
+                    <a class="nav-link" href="{{ url_for('user.login') }}">Вход</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Регистрация</a>
+                    <a class="nav-link" href="{{ url_for('user.register') }}">Регистрация</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>

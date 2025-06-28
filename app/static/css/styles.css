@@ -19,3 +19,76 @@
 .badge.bg-secondary {
     margin-right: 5px;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+}
+
+.navbar .dropdown-toggle img {
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.table-bordered td img {
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.cart-table {
+    margin-bottom: 20px;
+}
+
+.total-price {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.quantity-controls {
+    width: 120px;
+}
+
+.quantity-input {
+    width: 60px;
+    text-align: center;
+    font-size: 14px;
+    margin: 0 5px;
+}
+
+.minus-btn, .plus-btn {
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+.minus-btn:hover, .plus-btn:hover {
+    background-color: #e9ecef;
+}
+
+.card-body h6 {
+    font-weight: bold;
+}
+
+.badge {
+    margin-left: 5px;
+}
+
+.card-body p {
+    white-space: pre-line;
+}
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .text-muted {
+        font-size: 0.9rem;
+    }
