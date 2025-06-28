@@ -20,16 +20,14 @@ def index():
     return render_template('index.html', top_books=top_books, sections=sections)
 
 
-
-
 @book.route("/add_books")
 def create_table():
     with open('books_catalog.json', 'r') as file:
         data = json.load(file)
     for item in data:
         new_book = Book(title=item["title"], author=item["author"], price=item["price"], genre=item["genre"],
-                        cover=item["cover"], description=item["description"], rating=item["rating"],
-                        year=item["year"])  # Создаем объект задачи
+                        cover=item["cover"], description=item["description"],
+                        year=item["year"])
         db.session.add(new_book)
     db.session.commit()
     return render_template("index.html")
@@ -52,9 +50,7 @@ def list_books():
 @book.route('/book/<int:book_id>', methods=['GET'])
 def book_detail(book_id):
     book = Book.query.get_or_404(book_id)
-    comments = Comment.query.filter_by(book_id=book_id).order_by(Comment.created_at.desc()).all()
-    return render_template('detail.html', book=book, comments=comments)
-
+    return render_template('detail.html', book=book)
 
 
 @book.route('/book/<int:book_id>/comment', methods=['POST'])
@@ -77,6 +73,9 @@ def add_comment(book_id):
     )
 
     db.session.add(new_comment)
+
+    book.rating = book.average_rating
+
     db.session.commit()
 
     calculate_average_rating(book)

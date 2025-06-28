@@ -1,3 +1,5 @@
+from email.policy import default
+
 from ..extensions import db
 from datetime import datetime
 
@@ -19,10 +21,23 @@ class Book(db.Model):
     genre = db.Column(db.String(100), nullable=False)
     cover = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False)
-    rating = db.Column(db.Float, nullable=False)
+    rating = db.Column(db.Float, nullable=False, default=0.0)
     year = db.Column(db.Integer, nullable=False)
     cart_items = db.relationship('Cart', backref='book', lazy=True)
     sales_count = db.Column(db.Integer, default=0)
+
+    comments = db.relationship(
+        'Comment',
+        backref=db.backref('book_comment', lazy=True),  # Изменили имя backref
+        lazy=True
+    )
+
+    @property
+    def average_rating(self):
+        if not self.comments:
+            return 0.0
+        total_rating = sum(comment.rating for comment in self.comments if comment.rating is not None)
+        return round(total_rating / len(self.comments), 1) if total_rating else 0.0
 
     def __repr__(self):
         return f"<Book {self.title}"
@@ -47,7 +62,11 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='comments')
-    book = db.relationship('Book', backref='comments')
+    book = db.relationship(
+        'Book',
+        backref=db.backref('book_comments', lazy=True),  # Изменили имя backref
+        lazy=True
+    )
 
     def __repr__(self):
         return f"<Comment {self.user.email}"

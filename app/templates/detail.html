@@ -19,7 +19,20 @@
                     <p><strong>Цена:</strong> {{ book.price }} ₽</p>
                     <p><strong>Жанр:</strong> {{ book.genre }}</p>
                     <p><strong>Год издания:</strong> {{ book.year }}</p>
-                    <p><strong>Рейтинг:</strong> {{ book.rating }}</p>
+                    <div class="mb-2">
+                        <span class="badge bg-primary">
+                            Рейтинг: {{ book.average_rating }}
+                        </span>
+                    </div>
+
+                    <div class="rating-stars">
+                        {% for _ in range(book.average_rating|int) %}
+                        <i class="fas fa-star text-warning"></i>
+                        {% endfor %}
+                        {% for _ in range(5 - book.average_rating|int) %}
+                        <i class="fas fa-star text-muted"></i>
+                        {% endfor %}
+                    </div>
                     <p><strong>Описание:</strong><br>{{ book.description }}</p>
                 </div>
             </div>
@@ -63,8 +76,8 @@
 
             <hr>
 
-            <h4>Все отзывы ({{ comments|length }})</h4>
-            {% for comment in comments %}
+            <h4>Все отзывы ({{ book.book_comments|length }})</h4>
+            {% for comment in book.book_comments %}
             <div class="card mb-3">
                 <div class="card-body">
                     <h6>
