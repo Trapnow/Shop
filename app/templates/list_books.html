@@ -5,7 +5,21 @@
     <div class="row">
         {% include "catalog-menu.html" %}
         <div class="col-md-9">
-            <h2 class="text-center mb-4">Каталог книг</h2>
+            <h2 class="text-center mb-4">
+                {% if query %}
+                    Результаты поиска: "{{ query }}"
+                {% else %}
+                    Каталог книг
+                {% endif %}
+            </h2>
+
+            <!-- Сообщение при отсутствии результатов -->
+            {% if not books and query %}
+                <div class="alert alert-info">
+                    Книги по запросу "{{ query }}" не найдены
+                </div>
+            {% endif %}
+
             <div class="row gy-4">
                 <!-- Шаблон карточки книги -->
                 {% for book in books %}
@@ -27,21 +41,17 @@
                             </p>
 
                             <!-- Рейтинг книги -->
-                            <div class="card-body">
-                                <!-- другие поля -->
+                            <div class="mb-2">
+                                <span class="badge bg-primary">
+                                    Рейтинг: {{ book.average_rating }}
+                                </span>
+                            </div>
 
-                                <div class="mb-2">
-                                    <span class="badge bg-primary">
-                                        Рейтинг: {{ book.average_rating }}
-                                    </span>
-                                </div>
-
-                                <!-- краткое визуальное отображение -->
-                                <div class="rating-stars-small">
-                                    {% for _ in range(book.average_rating|int) %}
+                            <!-- краткое визуальное отображение -->
+                            <div class="rating-stars-small">
+                                {% for _ in range(book.average_rating|int) %}
                                     <i class="fas fa-star text-warning"></i>
-                                    {% endfor %}
-                                </div>
+                                {% endfor %}
                             </div>
 
                             <!-- Краткое описание -->
@@ -52,7 +62,7 @@
 
                             <!-- Кнопка добавления в корзину -->
                             <form action="{{ url_for('cart.add_to_cart', book_id=book.id) }}" method="post">
-                                <button type="submit" class="btn btn-primary">Добавить корзину</button>
+                                <button type="submit" class="btn btn-primary">Добавить в корзину</button>
                             </form>
                             <a href="{{ url_for('book.book_detail', book_id=book.id) }}"
                                class="btn btn-outline-primary">Подробнее</a>

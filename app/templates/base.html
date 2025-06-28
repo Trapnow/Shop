@@ -17,8 +17,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
+            <form class="d-flex" action="{{ url_for('book.list_books') }}" method="GET">
+                <input class="form-control me-2" type="search" name="query"
+                       placeholder="Поиск книги" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Искать</button>
             </form>
             <ul class="navbar-nav ms-auto">
@@ -35,7 +36,7 @@
                         <span class="bi-person"></span>
                         {% endif %}
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end"  aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{ url_for('cart.show_cart') }}">Корзина</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('order.user_orders') }}">Заказы</a></li>
                         <li>

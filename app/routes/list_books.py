@@ -38,13 +38,32 @@ def list_books():
     sections = Section.query.all()
 
     genre = request.args.get('genre', None)
+    query = request.args.get('query', '')
+
 
     if genre:
-        books = Book.query.filter(Book.genre.ilike(f'%{genre}%')).all()
+        books = Book.query.filter(
+            Book.genre.ilike(f'%{genre}%')
+        )
     else:
-        books = Book.query.all()
+        books = Book.query
 
-    return render_template("list_books.html", books=books, sections=sections, selected_genre=genre)
+
+    if query:
+        books = books.filter(
+            (Book.title.ilike(f'%{query}%')) |
+            (Book.author.ilike(f'%{query}%'))
+        )
+
+    books = books.all()
+
+    return render_template(
+        "list_books.html",
+        books=books,
+        sections=sections,
+        selected_genre=genre,
+        search_query=query
+    )
 
 
 @book.route('/book/<int:book_id>', methods=['GET'])
